@@ -14,7 +14,8 @@ import json
 import base64
 ...
 ocr_endpoint = 'http://localhost:5000'
-with open(filename(i), "rb") as pdf:
+pdf_filename = "~/Downloads/sample-menu.pdf"
+with open(pdf_filename, "rb") as pdf:
   pdf_data = pdf.read()
   response = requests.post(ocr_endpoint, data=pdf_data, params={"dpi": 400 })
   pages_data = response.json()
