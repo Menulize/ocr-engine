@@ -8,18 +8,18 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-pdf_slicer = "https://pdf-slicer-service.gallodigital.com/pdf_to_jpg_pages"
+pdf_slicer = "https://pdf-slicer-service.gallodigital.com/pdf_to_jpgs"
 
 @app.route("/check")
 def check():
     return json.dumps({})
 
-@app.route("/pdf_to_text")
+@app.route("/pdf_to_text", methods = ['POST'])
 def pdf_to_text():
     dpi = request.args.get("dpi", default=200)
     include_jpgs = request.args.get("jpgs", default=False)
     pdf_data = request.data 
-    response = requests.get(pdf_slicer, data=pdf_data, params={"dpi": dpi})
+    response = requests.post(pdf_slicer, data=pdf_data, params={"dpi": dpi})
     image_data = (response.json())
 
     with tempfile.TemporaryDirectory() as dirpath:
