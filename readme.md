@@ -13,6 +13,6 @@ sudo apt install -y tesseract-ocr
 ```
 ## Run server
 ### production
-```python app.py``` 
+```python3 app.py``` 
 ### development: 
 ```flask run```
