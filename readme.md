@@ -2,9 +2,28 @@
 - Python API wrapper around tesseract in combination with a PDF slicer to generate TXT for each page of a PDF
 - Can optionally return back JPG with the text for each page
 
-## Usage
+## Usage CURL
 ```
 curl  --request POST --data-binary "@file.pdf" http://localhost:5000/pdf_to_text?dpi=400&jpgs 
+```
+
+## Usage Python
+```
+import requests
+import json
+import base64
+...
+ocr_endpoint = 'http://localhost:5000'
+pdf_filename = "~/Downloads/sample-menu.pdf"
+with open(pdf_filename, "rb") as pdf:
+  pdf_data = pdf.read()
+  response = requests.post(ocr_endpoint, data=pdf_data, params={"dpi": 400 })
+  pages_data = response.json()
+  for page in pages_data['pages']:
+    txt = page['text']
+    jpg = base64.b64decode(page['image_raw'])
+    # do something ...
+   
 ```
 
 ## Output JSON
