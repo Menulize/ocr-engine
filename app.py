@@ -5,14 +5,36 @@ import pdb
 import os
 import tempfile
 from flask import Flask, request 
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app, resources={r"*": {"origins": "*"}})
 
 pdf_slicer = "https://pdf-slicer-service.gallodigital.com/pdf_to_jpgs"
 
 @app.route("/check")
 def check():
     return json.dumps({})
+
+@app.route("/img_to_text", methods = ['POST'])
+def img_to_text():
+    dpi = request.args.get("dpi", default=200)
+    include_jpgs = request.args.get("jpgs", default=False)
+    image_data = request.data 
+
+    with tempfile.TemporaryDirectory() as dirpath:
+        filename = dirpath + "/img"  
+        outputname= dirpath + "0" 
+        out = {} 
+        out['image_raw'] = base64.encodebytes(image_data).decode('ascii') 
+        with open(filename, "wb") as page_image_out:
+            page_image_out.write(image_data)
+            cmd = 'tesseract ' + filename + " " + outputname + " --dpi " + str(dpi)
+            os.system(cmd)
+            with open(outputname + ".txt", 'r') as f_out:
+                out['text'] = f_out.read() 
+        
+        return json.dumps(out)
 
 @app.route("/pdf_to_text", methods = ['POST'])
 def pdf_to_text():

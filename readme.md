@@ -25,7 +25,7 @@ curl  --request POST --data-binary "@file.pdf" http://localhost:5000/pdf_to_text
 ```
 sudo apt-get update
 sudo apt-get -y install python3-pip
-pip3 install flask waitress
+pip3 install flask waitress flask_cors
 sudo apt-get install -y poppler-utils
 sudo add-apt-repository -y ppa:alex-p/tesseract-ocr5
 sudo apt install -y tesseract-ocr
