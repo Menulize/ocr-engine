@@ -25,15 +25,16 @@ def img_to_text():
     with tempfile.TemporaryDirectory() as dirpath:
         filename = dirpath + "/img"  
         outputname= dirpath + "0" 
-        out = {} 
-        out['image_raw'] = base64.encodebytes(image_data).decode('ascii') 
+        out = { 'page_count': 1, 'pages': [] }
+        page_d  = {}
+        page_d['image_raw'] = base64.encodebytes(image_data).decode('ascii') 
         with open(filename, "wb") as page_image_out:
             page_image_out.write(image_data)
             cmd = 'tesseract ' + filename + " " + outputname + " --dpi " + str(dpi)
             os.system(cmd)
             with open(outputname + ".txt", 'r') as f_out:
-                out['text'] = f_out.read() 
-        
+                page_d['text'] = f_out.read() 
+        out['pages'].append(page_d) 
         return json.dumps(out)
 
 @app.route("/pdf_to_text", methods = ['POST'])
